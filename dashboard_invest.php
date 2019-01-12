@@ -216,7 +216,7 @@
                   </div>
                   <div class="x_content">
                     <div class="col-md-9 col-sm-12 col-xs-12">
-                    <div id="echart_line" style="height:350px;"></div>
+                    <!--<div id="echart_line" style="height:350px;"></div>-->
                     <div id="echart_line2" style="height:350px;"></div>
                       
                     </div>
@@ -347,36 +347,67 @@
     <script type="text/javascript">
         // based on prepared DOM, initialize echarts instance
         var myChart = echarts.init(document.getElementById('echart_line2'));
+        var descricaoArray = [];
+        var valorArray = [];
 
-        // specify chart configuration item and data
-        var option = {
-            title: {
-                text: 'ECharts entry example'
-            },
-            tooltip: {},
-            legend: {
-                data:['Sales', 'dois']
-            },
-            xAxis: {
-                data: ["shirt","cardign","chiffon shirt","pants","heels","socks"]
-            },
-            yAxis: {},
-            series: [{
-                name: 'Sales',
-                type: 'line',
-                data: [5, 20, 36, 10, 10, 20]
-            },{
-                name: 'Sales2',
-                type: 'line',
-                data: [25, 10, 16, 20, 8, 12]
+        $.getJSON('lerIndicadores.php', function (data) {
+            console.log(data);
+            for (var i=0; i< data.length; i++){
+                descricaoArray.push(data[i].descricao);
+                valorArray.push(data[i].valor);
             }
-        ]
-        };
-
+            option = {
+                title: {
+                    text: 'Indicadores'
+                },
+                tooltip: {},
+                legend: {
+                    data: descricaoArray,
+                    align: 'left'
+                },
+                xAxis:[
+                   {
+                    type : 'category',
+                    data : descricaoArray   
+                   }
+                ],
+                yAxis: {},
+                series: [{
+                    name: 'Poupança',
+                    type: 'bar',
+                    data: [0.37]
+                }, {
+                    name: 'SELIC',
+                    type: 'bar',
+                    data: [0.48]
+                }, {
+                    name: 'Bolsa (Bovespa)',
+                    type: 'bar',
+                    data: [-1.81]
+                }, {
+                    name: 'Rageo',
+                    type: 'bar',
+                    data: [2]
+                }]
+                
+//                series : [
+//                    {
+//                        name: descricaoArray,
+//                        type: 'bar',
+//                        data: valorArray
+//                    }
+//                ]
+            };
         // use configuration item and data specified to show chart
+        console.log(option);
         myChart.setOption(option);
+        });
+
     </script>
 
+    <?php
+       include_once('lerIndicadores.php');
+    ?>      
 
   </body>
 </html>
